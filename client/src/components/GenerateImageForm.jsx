@@ -9,7 +9,7 @@ const Form = styled.div`
   padding: 16px 20px;
   display: flex;
   flex-direction: column;
-  gap: 9vh;
+  gap: 30px;
   justify-content: center;
 `;
 const Top = styled.div`
@@ -36,7 +36,6 @@ const Body = styled.div`
   color: ${({ theme }) => theme.text_secondary};
 `;
 const Actions = styled.div`
-  flex: 1;
   display: flex;
   gap: 8px;
 `;

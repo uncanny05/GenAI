@@ -4,8 +4,8 @@ import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
-  min-height: 300px;
   flex: 1;
+  min-height: 300px;
   gap: 16px;
   flex-direction: column;
   align-items: center;

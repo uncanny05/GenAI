@@ -5,6 +5,7 @@ import GeneratedImageCard from "../components/GeneratedImageCard";
 
 const Container = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   height: 100%;
@@ -17,12 +18,12 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
+  width: 100%;
   height: fit-content;
   display: flex;
   justify-content: center;
-  gap: 8vh;
-  width: 100%;
-  max-width: 1200px;
+  gap: 8%;
+  max-width: 1100px;
   @media (max-width: 768px) {
     flex-direction: column;
   }
@@ -30,7 +31,7 @@ const Wrapper = styled.div`
 
 const CreatePost = () => {
   const [post, setPost] = useState({
-    author: "",
+    name: "",
     prompt: "",
     photo: "",
   });
@@ -47,7 +48,7 @@ const CreatePost = () => {
           generateImageLoading={generateImageLoading}
           setGenerateImageLoading={setGenerateImageLoading}
         />
-        <GeneratedImageCard />
+        <GeneratedImageCard src={post?.photo} loading={generateImageLoading} />
       </Wrapper>
     </Container>
   );
