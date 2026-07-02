@@ -34,7 +34,7 @@ export const createPost = async (req, res, next) => {
     const newPost = await Post.create({
       name,
       prompt,
-      photo: photUrl,
+      photo: photoUrl?.secure_url,
     });
     return res.status(200).json({ success: true, data: newPost });
   } catch (error) {
