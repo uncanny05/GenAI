@@ -16,14 +16,19 @@ export const generateImage = async (req, res, next) => {
   try {
     const { prompt } = req.body;
 
-    const response = await openai.createImage({
-      prompt,
-      n: 1,
-      size: "1024x1024",
-      response_format: "b64_json",
-    });
-    const generatedImage = response.data.data[0].b64_json;
-    return res.status(200).json({ success: true, photo: generatedImage });
+    // const response = await openai.createImage({
+    //   prompt,
+    //   n: 1,
+    //   size: "1024x1024",
+    //   response_format: "b64_json",
+    // });
+    // const generatedImage = response.data.data[0].b64_json;
+
+    return res.status(200).json({
+      success: true,
+      photo:
+        "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1024",
+    }); // generatedImage
   } catch (error) {
     next(
       createError(
