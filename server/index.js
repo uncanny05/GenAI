@@ -3,6 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 import PostRouter from "./routes/Posts.js";
+import generateImage from "./routes/GenerateImage.js";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use("/api/post", PostRouter);
+app.use("/api/generateImage", generateImage);
 
 // Default get
 app.get("/", async (req, res) => {
@@ -34,7 +36,7 @@ const connectDB = () => {
     .connect(process.env.MONGODB_URL)
     .then(() => console.log("MongoDB Connected"))
     .catch((err) => {
-      console.error("Failed to connect to DB");
+      console.error("Failed to connect to DB:", err.message);
     });
 };
 
