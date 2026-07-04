@@ -25,7 +25,7 @@ app.use("/api/generateImage", generateImage);
 // Default get
 app.get("/", async (req, res) => {
   res.status(200).json({
-    message: "Hello Develpoers!",
+    message: "Hello Developers!",
   });
 });
 
