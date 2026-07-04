@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SearchBar from "../components/SearchBar";
 import ImageCard from "../components/ImageCard";
+import { CircularProgress } from "@mui/material";
+import { GetPosts } from "../api/index";
 
 const Container = styled.div`
   height: 100%;
@@ -31,7 +33,7 @@ const Headline = styled.div`
 `;
 
 const Span = styled.div`
-  font-size: 30;
+  font-size: 30px;
   font-weight: 800;
   color: ${({ theme }) => theme.secondary};
   @media (max-width: 600px) {
@@ -62,32 +64,78 @@ const CardWrapper = styled.div`
 `;
 
 const Home = () => {
-  const item = {
-    photo:
-      "https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg",
-    author: "Dave",
-    prompt: "HEY Prompt",
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState([]);
+
+  const getPosts = async () => {
+    setLoading(true);
+    await GetPosts()
+      .then((res) => {
+        setPosts(res?.data?.data);
+        setFilteredPosts(res?.data?.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error?.response?.data?.message);
+        setLoading(false);
+      });
   };
+
+  useEffect(() => {
+    getPosts();
+  }, []);
+
+  useEffect(() => {
+    if (!search) {
+      setFilteredPosts(posts);
+    }
+
+    const SearchFilteredPosts = posts.filter((post) => {
+      const promptMatch = post?.prompt
+        ?.toLowerCase()
+        .includes(search.toString().toLowerCase());
+      const authorMatch = post?.name
+        ?.toLowerCase()
+        .includes(search.toString().toLowerCase());
+
+      return promptMatch || authorMatch;
+    });
+
+    if (search) {
+      setFilteredPosts(SearchFilteredPosts);
+    }
+  }, [posts, search]);
+
   return (
     <Container>
       <Headline>
         Explore popular posts in the Community!
         <Span>◉ Generate with AI ◉</Span>
-        <SearchBar />
+        <SearchBar search={search} setSearch={setSearch} />
       </Headline>
       <Wrapper>
-        <CardWrapper>
-          <ImageCard item={item} />
-          <ImageCard item={item} />
-          <ImageCard item={item} />
-          <ImageCard item={item} />
-          <ImageCard item={item} />
-          <ImageCard item={item} />
-          <ImageCard item={item} />
-          <ImageCard item={item} />
-          <ImageCard item={item} />
-          <ImageCard item={item} />
-        </CardWrapper>
+        {error && <div style={{ color: "red" }}>{error}</div>}
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <CardWrapper>
+            {filteredPosts.length === 0 ? (
+              <>No Posts Found</>
+            ) : (
+              <>
+                {filteredPosts
+                  .slice()
+                  .reverse()
+                  .map((item, index) => (
+                    <ImageCard key={index} item={item} />
+                  ))}
+              </>
+            )}
+          </CardWrapper>
+        )}
       </Wrapper>
     </Container>
   );
